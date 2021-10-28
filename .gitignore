@@ -8,3 +8,6 @@ account
 /account.txt
 /sess.data
 /dailyFudan3.1.py
+__pycache__/api.cpython-36.pyc
+getCaptcha.py
+.vscode/×

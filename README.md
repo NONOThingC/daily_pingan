@@ -40,7 +40,7 @@
 
 ![new-secret.png](https://i.loli.net/2020/10/28/sxTuBFtRvzSgUaA.png)
 
-- 建立名为`FUDAN`的 secret，值为`学号`+`(空格)`+`密码`，最后点击`Add secret`
+- 建立名为`FUDAN`的 secret，值为`学号`+`(空格)`+`密码`+`(空格)`+`api用户名`+`(空格)`+`api密码`，最后点击`Add secret`
 
 - secret名字必须为`FUDAN`！
 - secret名字必须为`FUDAN`！
@@ -79,7 +79,8 @@
 
 </details>
 
-
+## Update
+增加了自动识别验证码的功能，需要去http://fast.95man.com/auth/main.html申请个账号密码，并把账号密码填写到secret中的api用户名和api密码对应位置。
 
 
 
