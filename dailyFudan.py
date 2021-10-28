@@ -7,6 +7,8 @@ from sys import argv as sys_argv
 from lxml import etree
 from requests import session
 import logging
+from geo_disturbance import geoDisturbance
+
 logging.basicConfig(
     level=logging.INFO,
     format=
@@ -187,7 +189,8 @@ class Zlapp(Fudan):
             "area": " ".join(set((province, city, district))),
             "ismoved": 0,
             'sfzx': 1,
-            "code": captcha_code
+            "code": captcha_code,
+            "geo_api_info" : geoDisturbance(self.last_info["geo_api_info"])
         })
         # logging.debug(self.last_info)
 
