@@ -11,3 +11,5 @@ account
 __pycache__/api.cpython-36.pyc
 getCaptcha.py
 .vscode/
+tmp.txt
+__pycache__/*
