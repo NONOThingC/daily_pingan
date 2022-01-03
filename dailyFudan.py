@@ -189,8 +189,15 @@ class Zlapp(Fudan):
             "area": " ".join(set((province, city, district))),
             "ismoved": 0,
             'sfzx': 1,
+            "sfzgn": 1,
+            "xs_sfdyz": 1,
+            "xs_dyzdd": 1,
+            "xs_sfdez": 1,
+            "xs_dezdd": 1,
+            "xs_ymtype": 1,
+            "xs_sfwcjqz": 1,
             "code": captcha_code,
-            "geo_api_info" : geoDisturbance(self.last_info["geo_api_info"])
+            "geo_api_info": geoDisturbance(self.last_info["geo_api_info"]),
         })
         # logging.debug(self.last_info)
 
