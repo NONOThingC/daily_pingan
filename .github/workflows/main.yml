@@ -28,13 +28,15 @@ jobs:
         run: |
           git config --global user.name  github-actions
           git config --global user.email github-actions@github.com
+          git config --global pull.rebase true
           git remote add upstream https://github.com/NONOThingC/daily_pingan
+          git config --global merge.ours.driver true
           git pull upstream master --allow-unrelated-histories
           git push origin master
       - name: Set up python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Random sleep
         if: github.event_name == 'schedule'
