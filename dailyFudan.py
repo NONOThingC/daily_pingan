@@ -48,7 +48,7 @@ class Fudan:
         :return: 登录页page source
         """
         logging.debug("Initiating——")
-        page_login = self.session.get(self.url_login)
+        page_login = self.session.get(self.url_login, verify=False)
 
         logging.debug("return status code " + str(page_login.status_code))
 
@@ -133,7 +133,7 @@ class Zlapp(Fudan):
         """
         logging.debug("检测是否已提交")
         get_info = self.session.get(
-            'https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info')
+            'https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info', verify=False)
         last_info = get_info.json()
 
         logging.info("上一次提交日期为: %s " % last_info["d"]["info"]["date"])
@@ -156,7 +156,7 @@ class Zlapp(Fudan):
     def get_captcha_code(self):
         logging.debug("获取验证码")
         captcha_url = "https://zlapp.fudan.edu.cn/backend/default/code"
-        r = self.session.get(captcha_url)
+        r = self.session.get(captcha_url, verify=False)
         logging.info(f"获取验证码成功")
         return r.content
 
