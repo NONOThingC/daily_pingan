@@ -5,6 +5,7 @@ from sys import exit as sys_exit
 from sys import argv as sys_argv
 
 from lxml import etree
+import requests
 from requests import session
 import logging
 from geo_disturbance import geoDisturbance
@@ -15,6 +16,30 @@ logging.basicConfig(
     '%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
 from api import GET_CAPTCHA
 
+import requests
+import urllib3
+import ssl
+
+
+class CustomHttpAdapter (requests.adapters.HTTPAdapter):
+    # "Transport adapter" that allows us to use custom ssl_context.
+
+    def __init__(self, ssl_context=None, **kwargs):
+        self.ssl_context = ssl_context
+        super().__init__(**kwargs)
+
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = urllib3.poolmanager.PoolManager(
+            num_pools=connections, maxsize=maxsize,
+            block=block, ssl_context=self.ssl_context)
+
+
+def get_legacy_session():
+    ctx = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+    ctx.options |= 0x4  # OP_LEGACY_SERVER_CONNECT
+    session = requests.session()
+    session.mount('https://', CustomHttpAdapter(ctx))
+    return session
 
 class Fudan:
     """
@@ -35,7 +60,7 @@ class Fudan:
         :param psw: 密码
         :param url_login: 登录页，默认服务为空
         """
-        self.session = session()
+        self.session = get_legacy_session()
         self.session.headers['User-Agent'] = self.UA
         self.url_login = url_login
         self.api_usr, self.api_pwd = api_usr, api_pwd
@@ -48,7 +73,7 @@ class Fudan:
         :return: 登录页page source
         """
         logging.debug("Initiating——")
-        page_login = self.session.get(self.url_login, verify=False)
+        page_login = self.session.get(self.url_login)
 
         logging.debug("return status code " + str(page_login.status_code))
 
@@ -133,7 +158,7 @@ class Zlapp(Fudan):
         """
         logging.debug("检测是否已提交")
         get_info = self.session.get(
-            'https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info', verify=False)
+            'https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info')
         last_info = get_info.json()
 
         logging.info("上一次提交日期为: %s " % last_info["d"]["info"]["date"])
@@ -156,7 +181,7 @@ class Zlapp(Fudan):
     def get_captcha_code(self):
         logging.debug("获取验证码")
         captcha_url = "https://zlapp.fudan.edu.cn/backend/default/code"
-        r = self.session.get(captcha_url, verify=False)
+        r = self.session.get(captcha_url)
         logging.info(f"获取验证码成功")
         return r.content
 

@@ -1,3 +1,5 @@
 lxml
 requests
+urllib3
+ssl
 cryptography==36.0.2
